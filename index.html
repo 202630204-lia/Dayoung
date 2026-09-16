@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘 뭐 먹지? | 점심 메뉴 추천기 🍱</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #fef9e7 0%, #fde2e4 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 440px;
+            padding: 35px 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        /* 카테고리 버튼 */
+        .category-group {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .cat-btn {
+            border: 1px solid #eee;
+            background: #f8f9fa;
+            color: #555;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cat-btn:hover {
+            background: #e9ecef;
+        }
+
+        .cat-btn.active {
+            background-color: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+            font-weight: 700;
+        }
+
+        /* 결과 표시 박스 */
+        .result-box {
+            background: #fff9f9;
+            border: 2px dashed #ffb8b8;
+            border-radius: 18px;
+            padding: 40px 20px;
+            margin-bottom: 25px;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.1s ease;
+        }
+
+        .menu-icon {
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+            line-height: 1;
+        }
+
+        .menu-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3436;
+            margin-bottom: 6px;
+        }
+
+        .menu-tag {
+            font-size: 0.9rem;
+            color: #ff7675;
+            font-weight: 500;
+        }
+
+        /* 추천 버튼 */
+        .pick-btn {
+            width: 100%;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .pick-btn:hover {
+            background-color: #ee5253;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .pick-btn:active {
+            transform: translateY(0);
+        }
+
+        .pick-btn:disabled {
+            background-color: #ccc;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="header">
+            <h1>오늘 뭐 먹지? 🍱</h1>
+            <p>결정장애를 해결해줄 랜덤 점심 추천기</p>
+        </div>
+
+        <!-- 카테고리 필터 -->
+        <div class="category-group">
+            <button class="cat-btn active" onclick="setCategory('전체', this)">전체</button>
+            <button class="cat-btn" onclick="setCategory('한식', this)">한식</button>
+            <button class="cat-btn" onclick="setCategory('중식', this)">중식</button>
+            <button class="cat-btn" onclick="setCategory('일식', this)">일식</button>
+            <button class="cat-btn" onclick="setCategory('양식', this)">양식</button>
+            <button class="cat-btn" onclick="setCategory('분식', this)">분식</button>
+        </div>
+
+        <!-- 결과 창 -->
+        <div class="result-box" id="resultBox">
+            <div class="menu-icon" id="menuIcon">❓</div>
+            <div class="menu-name" id="menuName">버튼을 눌러보세요!</div>
+            <div class="menu-tag" id="menuTag">#오늘의점심 #랜덤추천</div>
+        </div>
+
+        <!-- 버튼 -->
+        <button class="pick-btn" id="pickBtn" onclick="pickRandomMenu()">🎲 오늘의 점심 추천받기</button>
+    </div>
+
+    <script>
+        // 점심 메뉴 데이터
+        const menuList = [
+            // 한식
+            { name: "김치찌개", category: "한식", icon: "🥘", tag: "#얼큰함 #든든한한끼 #국물요리" },
+            { name: "제육볶음", category: "한식", icon: "🥩", tag: "#매콤달콤 #밥도둑 #고기" },
+            { name: "비빔밥", category: "한식", icon: "🥗", tag: "#건강식 #영양만점 #신선함" },
+            { name: "순대국밥", category: "한식", icon: "🍲", tag: "#뜨끈뜨끈 #해장 #속풀이" },
+            { name: "된장찌개", category: "한식", icon: "🍲", tag: "#구수한맛 #집밥느낌 #가성비" },
+            { name: "칼국수", category: "한식", icon: "🍜", tag: "#쫄깃함 #면요리 #시원한국물" },
+
+            // 중식
+            { name: "짜장면", category: "중식", icon: "🍜", tag: "#클래식 #단짠단짠 #빠른배달" },
+            { name: "짬뽕", category: "중식", icon: "🍜", tag: "#시원칼칼 #해물가득 #해장" },
+            { name: "볶음밥", category: "중식", icon: "🍚", tag: "#고소함 #불향 #든든함" },
+            { name: "마라탕", category: "중식", icon: "🌶️", tag: "#중독성 #얼얼함 #취향존중" },
+
+            // 일식
+            { name: "돈가스", category: "일식", icon: "🥩", tag: "#바삭바삭 #겉바속촉 #남녀노소" },
+            { name: "초밥", category: "일식", icon: "🍣", tag: "#깔끔함 #신선함 #특별한날" },
+            { name: "라멘", category: "일식", icon: "🍜", tag: "#진한국물 #차슈 #면요리" },
+            { name: "가츠동", category: "일식", icon: "🍲", tag: "#덮밥 #달콤짭조름 #든든함" },
+
+            // 양식
+            { name: "파스타", category: "양식", icon: "🍝", tag: "#분위기 #크림or오일 #기분전환" },
+            { name: "수제버거", category: "양식", icon: "🍔", tag: "#육즙가득 #푸짐함 #패스트푸드" },
+            { name: "피자", category: "양식", icon: "🍕", tag: "#치즈듬뿍 #여럿이서 #맛있음" },
+            { name: "리조또", category: "양식", icon: "🍚", tag: "#부드러움 #고소함 #양식" },
+
+            // 분식
+            { name: "떡볶이", category: "분식", icon: "🍢", tag: "#매콤달콤 #튀김이랑 #국민간식" },
+            { name: "김밥 & 라면", category: "분식", icon: "🍜", tag: "#꿀조합 #가성비 #빠른한끼" },
+            { name: "샌드위치", category: "분식", icon: "🥪", tag: "#가벼운한끼 #신선함 #바쁜날" },
+            { name: "샐러드", category: "분식", icon: "🥗", tag: "#다이어트 #프레시 #가벼움" }
+        ];
+
+        let currentCategory = '전체';
+        let isSpinning = false;
+
+        // 카테고리 변경 함수
+        function setCategory(category, element) {
+            if (isSpinning) return;
+            
+            currentCategory = category;
+            
+            // 버튼 활성화 스타일 변경
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // 메뉴 추천 실행 함수 (슬롯 효과 애니메이션 포함)
+        function pickRandomMenu() {
+            if (isSpinning) return;
+
+            // 현재 선택된 카테고리에 맞는 메뉴만 필터링
+            const filteredMenu = currentCategory === '전체' 
+                ? menuList 
+                : menuList.filter(item => item.category === currentCategory);
+
+            if (filteredMenu.length === 0) return;
+
+            isSpinning = true;
+            const pickBtn = document.getElementById('pickBtn');
+            pickBtn.disabled = true;
+
+            let counter = 0;
+            const totalFrames = 20; // 애니메이션 반복 횟수
+            const intervalSpeed = 70; // 전환 속도 (ms)
+
+            const timer = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * filteredMenu.length);
+                const tempItem = filteredMenu[randomIndex];
+
+                document.getElementById('menuIcon').innerText = tempItem.icon;
+                document.getElementById('menuName').innerText = tempItem.name;
+                document.getElementById('menuTag').innerText = tempItem.tag;
+
+                counter++;
+
+                // 애니메이션 종료 시 최종 결과 확정
+                if (counter >= totalFrames) {
+                    clearInterval(timer);
+                    isSpinning = false;
+                    pickBtn.disabled = false;
+                }
+            }, intervalSpeed);
+        }
+    </script>
+</body>
+</html>
