@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FYP - For Your Page</title>
+  <style>
+    /* ----- Pastel Color Variables & Reset ----- */
+    :root {
+      --bg-pastel: #F4F6F9;
+      --card-bg: #FFFFFF;
+      --accent-primary: #5B67CA;
+      --accent-hover: #4854B5;
+      --accent-light: #EEF2FF;
+      --text-main: #2D3748;
+      --text-sub: #718096;
+      --border-color: #E2E8F0;
+      --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-pastel);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      padding: 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .bg-illustration {
+      position: absolute;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .bg-icon-1 { top: 6%; left: 5%; width: 85px; fill: #FF6B6B; transform: rotate(-12deg); }
+    .bg-icon-2 { top: 12%; right: 6%; width: 95px; fill: #8B5CF6; transform: rotate(15deg); }
+    .bg-icon-3 { bottom: 10%; left: 6%; width: 100px; fill: #10B981; transform: rotate(8deg); }
+    .bg-icon-4 { bottom: 14%; right: 5%; width: 80px; fill: #F59E0B; transform: rotate(-15deg); }
+    .bg-icon-ott1 { top: 36%; left: 3%; width: 90px; fill: #E11D48; transform: rotate(10deg); }
+    .bg-icon-ott2 { top: 46%; right: 4%; width: 85px; fill: #2563EB; transform: rotate(-8deg); }
+    .bg-icon-ott3 { top: 72%; left: 4%; width: 80px; fill: #EC4899; transform: rotate(18deg); }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: var(--accent-primary);
+      cursor: pointer;
+    }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.35s ease-in-out forwards;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .landing-content {
+      text-align: center;
+      padding: 50px 0;
+    }
+
+    .landing-title {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .landing-sub {
+      color: var(--text-sub);
+      font-size: 1.05rem;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-primary);
+      color: #FFFFFF;
+      border: none;
+      padding: 16px 32px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(91, 103, 202, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--accent-primary);
+      border: 1.5px solid var(--accent-primary);
+      padding: 16px 32px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-outline:hover {
+      background-color: var(--accent-light);
+      transform: translateY(-2px);
+    }
+
+    .features {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 60px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 28px;
+    }
+
+    .feature-item {
+      text-align: center;
+      color: var(--text-sub);
+      font-size: 0.9rem;
+    }
+
+    .feature-item span {
+      display: block;
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background-color: #E2E8F0;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 20%;
+      background-color: var(--accent-primary);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .step-indicator {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-bottom: 20px;
+      text-align: right;
+      font-weight: 500;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      padding: 36px 30px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    .step-title {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      color: var(--text-sub);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 10px;
+    }
+
+    .option-btn {
+      background-color: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      color: var(--text-main);
+      padding: 13px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .option-btn:hover {
+      border-color: var(--accent-primary);
+      background-color: var(--accent-light);
+    }
+
+    .option-btn.selected {
+      background-color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .text-input {
+      width: 100%;
+      padding: 14px 16px;
+      background-color: #FAFAFA;
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .text-input:focus {
+      border-color: var(--accent-primary);
+      background-color: #FFFFFF;
+    }
+
+    .autocomplete-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      max-height: 160px;
+      overflow-y: auto;
+      z-index: 10;
+      box-shadow: var(--shadow-soft);
+      display: none;
+      margin-top: 4px;
+    }
+
+    .autocomplete-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .autocomplete-item:hover {
+      background-color: var(--accent-light);
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      background-color: var(--accent-light);
+      color: var(--accent-primary);
+      border: 1px solid #CBD5E1;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag-remove {
+      cursor: pointer;
+      color: var(--text-sub);
+    }
+
+    .tag-remove:hover {
+      color: #EF4444;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--text-sub);
+      border: none;
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      color: var(--text-main);
+    }
+
+    .result-header {
+      margin-bottom: 24px;
+    }
+
+    .result-status {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .result-sub {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+    }
+
+    .section-divider {
+      margin: 32px 0 16px 0;
+      padding-top: 16px;
+      border-top: 1.5px dashed var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+    }
+
+    .media-card {
+      background-color: var(--card-bg);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .media-poster {
+      width: 82px;
+      height: 120px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background-color: #CBD5E1;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .media-info {
+      flex: 1;
+    }
+
+    .media-title-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .media-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .match-type {
+      font-size: 0.75rem;
+      font-weight: 700;
+      background-color: #E0E7FF;
+      color: var(--accent-primary);
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    .media-meta {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .media-meta span {
+      background: #F1F5F9;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .match-reasons {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .reason-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      background-color: #FEF3C7;
+      color: #B45309;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .ott-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .ott-badge {
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      background-color: var(--accent-light);
+      border-radius: 6px;
+      color: var(--accent-primary);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.2s;
+    }
+
+    .ott-badge:hover {
+      background-color: var(--accent-primary);
+      color: #FFFFFF;
+    }
+
+    .action-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+
+    .loading-spinner {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--accent-primary);
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+  </style>
+</head>
+<body>
+
+  <svg class="bg-illustration bg-icon-1" viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4h-2l2 4h-3l-2-4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+  <svg class="bg-illustration bg-icon-2" viewBox="0 0 24 24"><path d="M21.58 16.09l-1.09-7.66c-.27-1.91-1.89-3.32-3.82-3.37l-9.33-.24c-2.13-.05-3.92 1.58-4.07 3.71l-.57 8.01c-.17 2.37 1.7 4.38 4.07 4.44l9.33.24c2.37.06 4.38-1.7 4.44-4.07l.04-.56zM10 15V9l5 3-5 3z"/></svg>
+  <svg class="bg-illustration bg-icon-3" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+  <svg class="bg-illustration bg-icon-4" viewBox="0 0 24 24"><path d="M22 10V6c0-1.11-.9-2-2-2H4c-1.1 0-1.99.89-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-1.99 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2zm-9 7.5h-2v-2h2v2zm0-4.5h-2v-2h2v2zm0-4.5h-2v-2h2v2z"/></svg>
+  <svg class="bg-illustration bg-icon-ott1" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12zm-11-1l6-4.5-6-4.5v9z"/></svg>
+  <svg class="bg-illustration bg-icon-ott2" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+  <svg class="bg-illustration bg-icon-ott3" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+
+  <div class="container">
+    <header>
+      <div class="logo" onclick="goHome()">FYP</div>
+    </header>
+
+    <!-- 1. LANDING VIEW -->
+    <div id="view-landing" class="view active">
+      <div class="landing-content">
+        <h1 class="landing-title">For Your Page, FYP</h1>
+        <p class="landing-sub">제한된 시간 속, 나만을 위한 맞춤 콘텐츠 큐레이션</p>
+        <button class="btn-primary" onclick="startWizard()">추천받기</button>
+      </div>
+      <div class="features">
+        <div class="feature-item"><span>⏱️</span>맞춤 시간 설정</div>
+        <div class="feature-item"><span>🎬</span>취향 저격 장르</div>
+        <div class="feature-item"><span>📺</span>이용 중인 OTT</div>
+      </div>
+    </div>
+
+    <!-- 2. WIZARD VIEW -->
+    <div id="view-wizard" class="view">
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <div id="step-indicator" class="step-indicator">Step 1 of 5</div>
+
+      <div class="card">
+        <!-- Step 1 -->
+        <div id="step-1" class="step-content">
+          <h2 class="step-title">영상을 시청할 여유 시간이 얼마나 되시나요?</h2>
+          <p class="step-desc">선택하신 시간 범위 내에서 완결되는 콘텐츠를 우선 추천합니다.</p>
+          <div class="options-grid">
+            <button class="option-btn" onclick="selectTime('30분 이내', this)">30분 이내</button>
+            <button class="option-btn" onclick="selectTime('30분 ~ 1시간', this)">30분 ~ 1시간</button>
+            <button class="option-btn" onclick="selectTime('1시간 ~ 1시간 30분', this)">1시간 ~ 1시간 30분</button>
+            <button class="option-btn" onclick="selectTime('1시간 30분 ~ 2시간', this)">1시간 30분 ~ 2시간</button>
+            <button class="option-btn" onclick="selectTime('2시간 이상', this)">2시간 이상</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="step-2" class="step-content" style="display:none;">
+          <h2 class="step-title">어떤 장르의 영상을 원하시나요?</h2>
+          <p class="step-desc">원하는 장르를 모두 선택해 주세요. (중복 선택 가능)</p>
+          <div class="options-grid">
+            <button class="option-btn" onclick="toggleMulti('genre', '액션', this)">액션</button>
+            <button class="option-btn" onclick="toggleMulti('genre', '코미디', this)">코미디</button>
+            <button class="option-btn" onclick="toggleMulti('genre', '드라마', this)">드라마</button>
+            <button class="option-btn" onclick="toggleMulti('genre', 'SF/판타지', this)">SF/판타지</button>
+            <button class="option-btn" onclick="toggleMulti('genre', '공포/스릴러', this)">공포/스릴러</button>
+            <button class="option-btn" onclick="toggleMulti('genre', '로맨스', this)">로맨스</button>
+            <button class="option-btn" onclick="toggleMulti('genre', '애니메이션', this)">애니메이션</button>
+            <button class="option-btn" onclick="toggleMulti('genre', '범죄/미스터리', this)">범죄/미스터리</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div id="step-3" class="step-content" style="display:none;">
+          <h2 class="step-title">선호하는 제작 국가가 있나요?</h2>
+          <p class="step-desc">특정 국가 작품만 골라보거나 넓게 추천받을 수 있습니다.</p>
+          <div class="options-grid">
+            <button class="option-btn selected" onclick="toggleMulti('country', '전체', this)">전체 (상관없음)</button>
+            <button class="option-btn" onclick="toggleMulti('country', '한국', this)">한국</button>
+            <button class="option-btn" onclick="toggleMulti('country', '미국/할리우드', this)">미국/할리우드</button>
+            <button class="option-btn" onclick="toggleMulti('country', '일본', this)">일본</button>
+            <button class="option-btn" onclick="toggleMulti('country', '유럽', this)">유럽</button>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div id="step-4" class="step-content" style="display:none;">
+          <h2 class="step-title">원하는 배우나 감독이 있나요?</h2>
+          <p class="step-desc">이름 입력 후 엔터(Enter)를 누르거나 자동완성에서 선택하세요.</p>
+          <div class="input-group">
+            <input type="text" id="person-input" class="text-input" placeholder="예: 봉준호, 송강호, 하정우, 크리스토퍼 놀란 (Enter 입력)" oninput="handleAutoComplete(this.value)" onkeydown="if(event.key==='Enter') addPersonFromInput();">
+            <div id="autocomplete-list" class="autocomplete-list"></div>
+          </div>
+          <div id="person-tags" class="tag-container"></div>
+        </div>
+
+        <!-- Step 5 -->
+        <div id="step-5" class="step-content" style="display:none;">
+          <h2 class="step-title">이용 중인 구독 서비스(OTT)를 선택하세요.</h2>
+          <p class="step-desc">시청 가능한 플랫폼의 콘텐츠를 정밀 매칭합니다.</p>
+          <div class="options-grid">
+            <button class="option-btn" onclick="toggleMulti('ott', '넷플릭스', this)">넷플릭스</button>
+            <button class="option-btn" onclick="toggleMulti('ott', '디즈니+', this)">디즈니+</button>
+            <button class="option-btn" onclick="toggleMulti('option-btn', '왓챠', this)">왓챠</button>
+            <button class="option-btn" onclick="toggleMulti('ott', '웨이브', this)">웨이브</button>
+            <button class="option-btn" onclick="toggleMulti('ott', '티빙', this)">티빙</button>
+            <button class="option-btn" onclick="toggleMulti('ott', '쿠팡플레이', this)">쿠팡플레이</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button id="btn-prev" class="btn-secondary" onclick="prevStep()">이전</button>
+        <button id="btn-next" class="btn-primary" onclick="nextStep()">다음</button>
+      </div>
+    </div>
+
+    <!-- 3. RESULT VIEW -->
+    <div id="view-result" class="view">
+      <div class="result-header">
+        <div class="result-status">🎯 맞춤 큐레이션 결과</div>
+        <div class="result-sub">고객님의 조건과 선호도를 정밀 반영한 완벽 추천 작품입니다.</div>
+      </div>
+
+      <div id="result-list"></div>
+
+      <div class="action-group">
+        <button class="btn-primary" onclick="startWizard()">조건 다시 설정하기</button>
+        <button class="btn-outline" onclick="goHome()">메인 화면으로</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const userData = {
+      time: '',
+      genre: [],
+      country: ['전체'],
+      people: [],
+      ott: []
+    };
+
+    const autocompleteData = ['봉준호', '박찬욱', '송강호', '하정우', '크리스토퍼 놀란', '신카이 마코토', '이정재', '송혜교', '조인성', '한효주', '미야자키 하야오', '탕웨이', '류승룡', '마동석', '황정민'];
+    const TMDB_API_KEY = "15d2ce67f94b1275d05842f6f402749d";
+
+    const mockDatabase = [
+      { id: 1, title: "러브, 데스 + 로봇", type: "단편 시리즈", timeCategory: "30분 이내", runtime: "15분", genre: ["SF/판타지", "애니메이션"], country: "미국/할리우드", people: ["데이비드 핀처"], ott: ["넷플릭스"], rating: "★ 4.8", poster: "" },
+      { id: 2, title: "기생충", type: "영화", timeCategory: "2시간 이상", runtime: "131분", genre: ["드라마", "범죄/미스터리"], country: "한국", people: ["봉준호", "송강호", "이선균", "조여정", "최우식"], ott: ["넷플릭스", "왓챠"], rating: "★ 4.9", poster: "" },
+      { id: 3, title: "스파이더맨: 뉴 유니버스", type: "영화", timeCategory: "1시간 30분 ~ 2시간", runtime: "117분", genre: ["애니메이션", "액션", "SF/판타지"], country: "미국/할리우드", people: [], ott: ["넷플릭스", "디즈니+"], rating: "★ 4.8", poster: "" },
+      { id: 4, title: "헤어질 결심", type: "영화", timeCategory: "2시간 이상", runtime: "138분", genre: ["로맨스", "범죄/미스터리", "드라마"], country: "한국", people: ["박찬욱", "탕웨이", "박해일"], ott: ["넷플릭스", "티빙"], rating: "★ 4.7", poster: "" },
+      { id: 5, title: "스즈메의 문단속", type: "영화", timeCategory: "1시간 30분 ~ 2시간", runtime: "122분", genre: ["애니메이션", "SF/판타지"], country: "일본", people: ["신카이 마코토"], ott: ["웨이브", "티빙"], rating: "★ 4.6", poster: "" },
+      { id: 6, title: "무빙", type: "드라마 (회당)", timeCategory: "30분 ~ 1시간", runtime: "50분", genre: ["액션", "SF/판타지", "드라마"], country: "한국", people: ["조인성", "한효주", "류승룡"], ott: ["디즈니+"], rating: "★ 4.8", poster: "" },
+      { id: 7, title: "더 글로리", type: "드라마 (회당)", timeCategory: "30분 ~ 1시간", runtime: "55분", genre: ["드라마", "공포/스릴러"], country: "한국", people: ["송혜교", "이도현", "임지연"], ott: ["넷플릭스"], rating: "★ 4.7", poster: "" },
+      { id: 8, title: "극한직업", type: "영화", timeCategory: "1시간 30분 ~ 2시간", runtime: "111분", genre: ["코미디", "액션"], country: "한국", people: ["류승룡", "이하늬", "진선규"], ott: ["넷플릭스", "티빙", "쿠팡플레이"], rating: "★ 4.6", poster: "" },
+      { id: 9, title: "괴물", type: "영화", timeCategory: "1시간 30분 ~ 2시간", runtime: "119분", genre: ["공포/스릴러", "SF/판타지", "드라마"], country: "한국", people: ["봉준호", "송강호", "변희봉", "박해일", "배두나"], ott: ["왓챠", "웨이브"], rating: "★ 4.5", poster: "" },
+      { id: 10, title: "오징어 게임", type: "드라마 (회당)", timeCategory: "30분 ~ 1시간", runtime: "50분", genre: ["공포/스릴러", "드라마"], country: "한국", people: ["이정재", "박해수", "위하준"], ott: ["넷플릭스"], rating: "★ 4.6", poster: "" },
+      { id: 11, title: "센과 치히로의 행방불명", type: "영화", timeCategory: "2시간 이상", runtime: "125분", genre: ["애니메이션", "SF/판타지"], country: "일본", people: ["미야자키 하야오"], ott: ["넷플릭스"], rating: "★ 4.9", poster: "" },
+      { id: 12, title: "인터스텔라", type: "영화", timeCategory: "2시간 이상", runtime: "169분", genre: ["SF/판타지", "드라마"], country: "미국/할리우드", people: ["크리스토퍼 놀란", "매튜 맥커너히"], ott: ["쿠팡플레이", "왓챠"], rating: "★ 4.8", poster: "" }
+    ];
+
+    const fallbackPoster = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='82' height='120' viewBox='0 0 82 120'><rect width='100%' height='100%' fill='%235B67CA'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23FFFFFF' font-size='11' font-family='sans-serif' font-weight='bold'>FYP MOVIE</text></svg>";
+
+    async function searchPersonWorksFromTMDB(personName) {
+      try {
+        const res = await fetch(`https://api.themoviedb.org/3/search/person?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(personName)}&language=ko-KR`);
+        const data = await res.json();
+        if (data.results && data.results.length > 0) {
+          const person = data.results[0];
+          const works = person.known_for || [];
+          return works.map(w => ({
+            id: w.id,
+            title: w.title || w.name,
+            type: w.media_type === 'tv' ? '드라마' : '영화',
+            timeCategory: "1시간 30분 ~ 2시간",
+            runtime: "약 120분",
+            genre: ["드라마", "액션"],
+            country: "전체",
+            people: [personName],
+            ott: userData.ott.length > 0 ? userData.ott : ["넷플릭스", "티빙"],
+            rating: `★ ${w.vote_average ? w.vote_average.toFixed(1) : '4.5'}`,
+            poster: w.poster_path ? `https://image.tmdb.org/t/p/w500${w.poster_path}` : fallbackPoster
+          }));
+        }
+      } catch (err) {
+        console.error("TMDB 인물 검색 실패:", err);
+      }
+      return [];
+    }
+
+    async function fetchRealPosters() {
+      for (let item of mockDatabase) {
+        if (!item.poster) {
+          try {
+            const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(item.title)}&language=ko-KR`);
+            const data = await res.json();
+            if (data.results && data.results.length > 0 && data.results[0].poster_path) {
+              item.poster = `https://image.tmdb.org/t/p/w500${data.results[0].poster_path}`;
+            } else {
+              item.poster = fallbackPoster;
+            }
+          } catch (err) {
+            item.poster = fallbackPoster;
+          }
+        }
+      }
+    }
+
+    function getOttLink(ott, title) {
+      const q = encodeURIComponent(title);
+      const links = {
+        '넷플릭스': `https://www.netflix.com/search?q=${q}`,
+        '디즈니+': `https://www.disneyplus.com/search/${q}`,
+        '왓챠': `https://watcha.com/search?query=${q}`,
+        '웨이브': `https://www.wavve.com/search?searchWord=${q}`,
+        '티빙': `https://www.tving.com/search?keyword=${q}`,
+        '쿠팡플레이': `https://www.coupangplay.com/`
+      };
+      return links[ott] || `https://www.google.com/search?q=${q}+${encodeURIComponent(ott)}`;
+    }
+
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+    }
+
+    function goHome() {
+      currentStep = 1;
+      showView('view-landing');
+    }
+
+    function startWizard() {
+      currentStep = 1;
+      updateStepUI();
+      showView('view-wizard');
+    }
+
+    function updateStepUI() {
+      document.querySelectorAll('.step-content').forEach(s => s.style.display = 'none');
+      document.getElementById(`step-${currentStep}`).style.display = 'block';
+
+      const progressPercent = (currentStep / 5) * 100;
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+      document.getElementById('step-indicator').innerText = `Step ${currentStep} of 5`;
+
+      document.getElementById('btn-prev').style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+      document.getElementById('btn-next').innerText = currentStep === 5 ? '결과 보기' : '다음';
+    }
+
+    async function nextStep() {
+      if (currentStep < 5) {
+        currentStep++;
+        updateStepUI();
+      } else {
+        document.getElementById('result-list').innerHTML = `<div class="loading-spinner">🎬 실시간 영화/드라마 큐레이션 및 포스터 불러오는 중...</div>`;
+        showView('view-result');
+        await renderResults();
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        updateStepUI();
+      }
+    }
+
+    function selectTime(val, btn) {
+      userData.time = val;
+      const parent = btn.parentElement;
+      parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    function toggleMulti(type, val, btn) {
+      const list = userData[type];
+      if (val === '전체') {
+        userData[type] = ['전체'];
+        btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        return;
+      }
+
+      const allIdx = list.indexOf('전체');
+      if (allIdx > -1) {
+        list.splice(allIdx, 1);
+        const allBtn = btn.parentElement.querySelector('.selected');
+        if (allBtn && allBtn.innerText.includes('전체')) allBtn.classList.remove('selected');
+      }
+
+      const idx = list.indexOf(val);
+      if (idx > -1) {
+        list.splice(idx, 1);
+        btn.classList.remove('selected');
+      } else {
+        list.push(val);
+        btn.classList.add('selected');
+      }
+    }
+
+    function handleAutoComplete(val) {
+      const listContainer = document.getElementById('autocomplete-list');
+      if (!val.trim()) {
+        listContainer.style.display = 'none';
+        return;
+      }
+      const matches = autocompleteData.filter(name => name.includes(val));
+      if (matches.length > 0) {
+        listContainer.innerHTML = matches.map(m => `<div class="autocomplete-item" onclick="addPerson('${m}')">${m}</div>`).join('');
+        listContainer.style.display = 'block';
+      } else {
+        listContainer.style.display = 'none';
+      }
+    }
+
+    function addPersonFromInput() {
+      const input = document.getElementById('person-input');
+      if (input.value.trim()) {
+        addPerson(input.value.trim());
+      }
+    }
+
+    function addPerson(name) {
+      if (!userData.people.includes(name)) {
+        userData.people.push(name);
+        renderTags();
+      }
+      document.getElementById('person-input').value = '';
+      document.getElementById('autocomplete-list').style.display = 'none';
+    }
+
+    function removePerson(name) {
+      userData.people = userData.people.filter(p => p !== name);
+      renderTags();
+    }
+
+    function renderTags() {
+      const tagContainer = document.getElementById('person-tags');
+      tagContainer.innerHTML = userData.people.map(p => `
+        <div class="tag">
+          ${p} <span class="tag-remove" onclick="removePerson('${p}')">✕</span>
+        </div>
+      `).join('');
+    }
+
+    async function renderResults() {
+      const resultContainer = document.getElementById('result-list');
+      await fetchRealPosters();
+
+      let currentDatabase = [...mockDatabase];
+
+      if (userData.people.length > 0) {
+        for (let p of userData.people) {
+          const fetchedWorks = await searchPersonWorksFromTMDB(p);
+          fetchedWorks.forEach(fw => {
+            if (!currentDatabase.some(dbItem => dbItem.title === fw.title)) {
+              currentDatabase.push(fw);
+            }
+          });
+        }
+      }
+
+      const scoredItems = currentDatabase.map(item => {
+        let score = 0;
+        let reasons = [];
+
+        if (userData.people.length > 0) {
+          const matchedPeople = item.people.filter(p => 
+            userData.people.some(uP => p.includes(uP) || uP.includes(p))
+          );
+          if (matchedPeople.length > 0) {
+            score += 500;
+            reasons.push(`👤 ${matchedPeople.join(', ')}`);
+          }
+        }
+
+        if (userData.genre.length > 0) {
+          const matchedGenres = item.genre.filter(g => userData.genre.includes(g));
+          if (matchedGenres.length > 0) {
+            score += 30 * matchedGenres.length;
+            reasons.push(`🎬 ${matchedGenres.join(', ')}`);
+          }
+        }
+
+        if (userData.ott.length > 0) {
+          const matchedOtt = item.ott.filter(o => userData.ott.includes(o));
+          if (matchedOtt.length > 0) {
+            score += 20;
+            reasons.push(`📺 ${matchedOtt.join(', ')}`);
+          }
+        }
+
+        if (userData.time && item.timeCategory === userData.time) {
+          score += 15;
+          reasons.push(`⏱️ 시간대 일치`);
+        }
+
+        return { ...item, score, reasons };
+      });
+
+      scoredItems.sort((a, b) => b.score - a.score);
+
+      let primaryMatches = [];
+      let secondaryMatches = [];
+
+      if (userData.people.length > 0) {
+        primaryMatches = scoredItems.filter(item => item.reasons.some(r => r.startsWith('👤')));
+        secondaryMatches = scoredItems.filter(item => !item.reasons.some(r => r.startsWith('👤')));
+      } else {
+        primaryMatches = scoredItems.filter(item => item.score >= 30);
+        secondaryMatches = scoredItems.filter(item => item.score < 30);
+      }
+
+      let htmlContent = '';
+
+      if (primaryMatches.length > 0) {
+        htmlContent += primaryMatches.map(item => createMediaCard(item)).join('');
+      } else {
+        htmlContent += `<p style="color: var(--text-sub); font-size: 0.95rem; text-align: center; margin-bottom: 24px;">선택하신 조건에 일치하는 정확한 작품을 찾지 못해 추천 작품을 대신 출력합니다.</p>`;
+      }
+
+      if (secondaryMatches.length > 0 && primaryMatches.length < 5) {
+        htmlContent += `
+          <div class="section-divider">
+            🎬 추가 연관 추천 작품
+          </div>
+        `;
+        htmlContent += secondaryMatches.slice(0, 5 - primaryMatches.length).map(item => createMediaCard(item)).join('');
+      }
+
+      resultContainer.innerHTML = htmlContent;
+    }
+
+    function createMediaCard(item) {
+      const posterSrc = item.poster && item.poster !== "" ? item.poster : fallbackPoster;
+      return `
+        <div class="media-card">
+          <img src="${posterSrc}" 
+               alt="${item.title} 포스터" 
+               class="media-poster" 
+               loading="lazy" 
+               onerror="this.onerror=null; this.src='${fallbackPoster}';" />
+          <div class="media-info">
+            <div class="media-title-container">
+              <div class="media-title">${item.title}</div>
+              <div class="match-type">${item.type}</div>
+            </div>
+            <div class="media-meta">
+              <span>⏱️ ${item.runtime}</span>
+              <span>🌍 ${item.country}</span>
+              <span style="color:#D97706; font-weight:600;">${item.rating}</span>
+            </div>
+            ${item.reasons.length > 0 ? `
+              <div class="match-reasons">
+                ${item.reasons.map(r => `<span class="reason-badge">${r}</span>`).join('')}
+              </div>
+            ` : ''}
+            <div class="ott-badges">
+              ${item.ott.map(o => `
+                <a href="${getOttLink(o, item.title)}" target="_blank" rel="noopener noreferrer" class="ott-badge">
+                  ${o} ↗
+                </a>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
